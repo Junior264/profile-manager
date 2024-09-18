@@ -8,11 +8,32 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "customer",
+    uniqueConstraints = {
+            @UniqueConstraint(
+                    name = "customer_email_unique",
+                    columnNames = "email"
+            ),
+            @UniqueConstraint(
+                    name = "profile_image_id_unique",
+                    columnNames = "profileImageId"
+            )
+    }
+)
 public class Customer implements UserDetails {
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "customer_id_seq"
+    )
     private Integer id;
     private String name;
     private String email;
     private Integer age;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String password;
     private String profileImageId;
